@@ -1,0 +1,315 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+\usepackage{common}
+\usepackage{memoryviz}
+
+
+\title{Программирование}
+\subtitle{2 | Указатели и массивы}
+\author{a.glushko@g.nsu.ru}
+%\institute{University of ShareLaTeX}
+\date{13 февраля 2021}
+
+
+\begin{document}
+
+    \begin{frame}
+        \titlepage
+    \end{frame}
+
+    \begin{frame}{Указатель}
+        \begin{block}{Адрес}
+            \begin{itemize}
+                \item Номер ячейки памяти
+            \end{itemize}
+        \end{block}
+        \begin{block}{Указатель}<2>
+            \begin{itemize}
+                \item Адрес
+                \item Указывает (ссылается) на значение в памяти
+                \item Заданного типа
+                \item Взятие, разыменование, арифметика
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}[fragile]{Типы указателей}
+        \begin{block}{Указатель на int}
+            \begin{center}
+                \begin{tikzpicture}
+                    \node at (0, 0) {\code[basicstyle=\ttfamily\Huge]{int * x;}};
+                    \draw [decorate,decoration={brace,amplitude=12pt},xshift=0pt,yshift=-4pt] (-2.5, 0.7) -- (0.6, 0.7)
+                        node [align=center,black,midway,yshift=0.8cm] {тип указателя};
+                    \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-2.5, -0.1) -- (-0.5, -0.1)
+                        node [align=center,black,midway,yshift=-1.5cm] {тип значения\\ на которое указывает};
+                \end{tikzpicture}
+            \end{center}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}[fragile]{Типы указателей}
+        \begin{block}{Указатель на указатель на int}
+            \begin{center}
+                \begin{tikzpicture}
+                    \node at (0, 0) {\code[basicstyle=\ttfamily\Huge]{int ** x;}};
+                    \draw [decorate,decoration={brace,amplitude=12pt},xshift=0pt,yshift=-4pt] (-2.8, 0.7) -- (0.85, 0.7)
+                        node [align=center,black,midway,yshift=0.8cm] {тип указателя};
+                    \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-2.8, -0.1) -- (0.3, -0.1)
+                        node [align=center,black,midway,yshift=-1.5cm] {тип значения\\ на которое указывает};
+                \end{tikzpicture}
+            \end{center}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}[fragile]{Операции с указателями}
+        \begin{columns}
+            \column{0.5\textwidth}
+                \begin{block}{Взятие указателя}
+                    (Address-of)
+                    \begin{lstlisting}[basicstyle=\ttfamily\large]
+                        int x;
+                        int * p = &x;
+                    \end{lstlisting}
+                \end{block}
+            \column{0.5\textwidth}
+                \pause
+                \begin{block}{Разыменование}
+                    (Dereference)
+                    \begin{lstlisting}[basicstyle=\ttfamily\large]
+                        int * p;
+                        int x = *p;
+                    \end{lstlisting}
+                \end{block}
+        \end{columns}
+        \pause
+        \begin{center}
+            \begin{minipage}{0.4\textwidth}
+                \begin{lstlisting}[basicstyle=\ttfamily\large]
+                        *(&x) == x;
+                \end{lstlisting}
+            \end{minipage}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}[fragile,t]{Операции с указателями}
+        \begin{center}
+            \begin{tikzpicture}[ scale=0.8 ]
+                \memline{1}{7}
+                \memblock{2}{6}{x}
+                \only<-3>{\node[mem block] at (block x) {\code{42}}};
+                \only<4->{\node[mem block] at (block x) {\code{37}}};
+                \memaddr{2}{0x100}
+                \memlabel{2}{3}{\code{x}}
+
+                \begin{visibleenv}<3->
+                    \memline{8}{14}
+                    \memblock{9}{13}{p}
+                    \node[mem block] at (block p) {\code{0x123}};
+                    \memaddr{9}{0x200}
+                    \memlabel{9}{10}{\code{p}}
+                \end{visibleenv}
+            \end{tikzpicture}
+        \end{center}
+        \lstset{basicstyle=\ttfamily\large}%
+        \large
+        \only<1->{\code{int x = 42;}\\}
+        \only<2->{\code{int * p = &x;}\\}
+        \only<4->{\code{*p = 37;}\\~\\}
+    \end{frame}
+
+    \begin{frame}[fragile,t]{Адресная арифметика}
+        \begin{center}
+            \begin{tikzpicture}[ scale=0.8 ]
+                \memline{1}{14}
+
+                \memblock{2}{6}{x}
+                \node[mem block] at (block x) {x};
+                \memaddr{2}{0x100}
+%                \memlabel{2}{3}{\code{x}}
+
+                \begin{visibleenv}<3->
+                    \memblock{6}{10}{y}
+                    \node[mem block] at (block y) {y};
+                    \memaddr{6}{0x104}
+                \end{visibleenv}
+            \end{tikzpicture}
+        \end{center}
+        \lstset{basicstyle=\ttfamily\large}%
+        \large
+        \only<1->{\code{int x;}\\}
+        \only<2->{\code{int * p = &x;}\\}
+        \only<3->{\code{int * s = p + 1;}\\}
+        \only<4->{\code{long int diff = s-p;}}
+        \only<5->{\code{// == 1}}
+    \end{frame}
+
+    \begin{frame}{Адресная арифметика}
+        \begin{block}{Для указателей определены операции:}
+            \begin{enumerate}
+                \item Добавление (вычитание) целого числа
+                \item Сравнение с другим указателем
+                \item Вычитание указателей
+            \end{enumerate}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}[fragile,t]{Массив}
+        Массив -- упорядоченный набор элементов одного типа.
+        \begin{onlyenv}<2->
+            \begin{center}
+                \begin{tikzpicture}[ scale=0.8 ]
+                    \memline{1}{15}
+
+                    \memblock{2}{6}{x}
+                    \only<-4>{\node[mem block] at (block x) {x}};
+                    \only<5->{\node[mem block] at (block x) {\code{arr[0]}}};
+                    \memaddr{2}{0x100}
+
+                    \begin{onlyenv}<3->
+                        \memblock{6}{10}{y}
+                        \only<-4>{\node[mem block] at (block y) {y}};
+                        \only<5->{\node[mem block] at (block y) {\code{arr[1]}}};
+                        \memaddr{6}{0x104}
+                    \end{onlyenv}
+
+                    \begin{onlyenv}<4->
+                        \memblock{10}{14}{z}
+                        \only<-4>{\node[mem block] at (block z) {z}};
+                        \only<5->{\node[mem block] at (block z) {\code{arr[2]}}};
+                        \memaddr{10}{0x108}
+                    \end{onlyenv}
+                \end{tikzpicture}
+            \end{center}
+        \end{onlyenv}
+        \only<5->{\hrule}
+        \begin{onlyenv}<5>
+            \begin{center}
+                \begin{tikzpicture}
+                    \node at (0, -1) {\code[basicstyle=\ttfamily\Huge]{int arr[3];}};
+                    \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-3.5, -1.1) -- (-1.5, -1.1)
+                        node [align=center,black,midway,yshift=-1.0cm] {тип элементов};
+                    \draw [decorate,decoration={brace,amplitude=10pt,mirror,raise=10pt},xshift=0pt,yshift=-4pt] (1.5, -1.1) -- (2.2, -1.1)
+                        node [align=center,black,midway,yshift=-1.38cm] {число элементов \\ (константа)};
+                \end{tikzpicture}
+            \end{center}
+        \end{onlyenv}
+        \begin{onlyenv}<6->
+            \begin{columns}
+                \lstset{basicstyle=\ttfamily\Large}
+                \Large
+                \begin{column}{0.5\textwidth}
+                    \begin{center}
+                        \begin{minipage}{0.8\textwidth}
+                            {\color{maincolor}Запись:} \\
+                            \code{arr[i] = 42;} \\
+                            \only<7->{\code{*(arr + i) = 42;}}
+                        \end{minipage}
+                    \end{center}
+                \end{column}
+                \begin{column}{0.5\textwidth}
+                    \begin{center}
+                        \begin{minipage}{0.9\textwidth}
+                            {\color{maincolor}Чтение:} \\
+                            \code{int x = arr[i];} \\
+                            \only<7->{\code{int x = *(arr + i);}}
+                        \end{minipage}
+                    \end{center}
+                \end{column}
+            \end{columns}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}[fragile]{Объявление массива}
+        \begin{itemize}
+            \item<1-> Имена одномерных массивов в C --- неизменяемые указатели на первый элемент
+            \item<2-> Размер статического массива --- константа
+                \begin{itemize}
+                    \item<3-> Целое число
+                        \begin{lstlisting}
+                            int arr[42];
+                        \end{lstlisting}
+                    \item<4-> Константа препроцесора
+                        \begin{lstlisting}
+                            #define ARR_SIZE 42
+                            int arr[ARR_SIZE];
+                        \end{lstlisting}
+                \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Инициализация массива}
+        \begin{itemize}
+            \item<1-> Без инициализации
+                \begin{lstlisting}
+                    int arr[4]; // {?, ?, ?, ?}
+                \end{lstlisting}
+            \item<2-> С выводом размера
+                \begin{lstlisting}
+                    int arr[] = {4, 8}; // {4, 8}
+                \end{lstlisting}
+            \item<3-> Частичная инициализация
+                \begin{lstlisting}
+                    int arr[4] = {15, 16}; // {15, 16, ?, ?}
+                \end{lstlisting}
+            \item<4-> Инициализация строкой
+                \begin{lstlisting}
+                    char arr[] = "Hello"; // {'H', 'e', 'l', 'l', 'o', 0}
+                \end{lstlisting}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile,t]{Двумерные массивы}
+        \begin{onlyenv}<1,2>
+            \begin{lstlisting}
+                #define N 3
+                #define M 2
+
+                int main() {
+                    int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
+                    ...
+                }
+            \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<3->
+        \begin{lstlisting}
+                int main() {
+                    int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
+
+                    arr[0][0] == 4
+                    arr[0][1] == 8
+                    arr[2][1] == 42
+                }
+        \end{lstlisting}
+        \end{onlyenv}
+        \begin{onlyenv}<2->
+            \begin{center}
+                \begin{tikzpicture}[ scale=1 ]
+                    \memline{1}{9}
+
+                    \draw [mem block,draw=none] (2,\membottom)  rectangle (3,\memtop)  node [pos=0.5] (a00) {4};
+                    \draw [maincolor!50!black] (2,\membottom) grid (3,\memtop);
+                    \draw [mem block,draw=none] (3,\membottom)  rectangle (4,\memtop)  node [pos=0.5] (a01) {8};
+                    \draw [maincolor!50!black] (3,\membottom) grid (4,\memtop);
+                    \draw [mem block,draw=none] (4,\membottom)  rectangle (5,\memtop)  node [pos=0.5] (a10) {15};
+                    \draw [maincolor!50!black] (4,\membottom) grid (5,\memtop);
+                    \draw [mem block,draw=none] (5,\membottom)  rectangle (6,\memtop)  node [pos=0.5] (a11) {16};
+                    \draw [block byte lines] (5,\membottom) grid (6,\memtop);
+                    \draw [mem block,draw=none] (6,\membottom)  rectangle (7,\memtop)  node [pos=0.5] (a20) {23};
+                    \draw [block byte lines] (6,\membottom) grid (7,\memtop);
+                    \draw [mem block,draw=none] (7,\membottom)  rectangle (8,\memtop)  node [pos=0.5] (a21) {42};
+                    \draw [block byte lines] (7,\membottom) grid (8,\memtop);
+
+                    \draw [mem block,fill=none,thick] (2,\membottom) rectangle (4,\memtop);
+                    \draw [mem block,fill=none,thick] (4,\membottom) rectangle (6,\memtop);
+                    \draw [mem block,fill=none,thick] (6,\membottom) rectangle (8,\memtop);
+
+%                    \memaddr{2}{\footnotesize arr};
+%                    \memaddr{4}{\footnotesize arr[1]};
+%                    \memaddr{7}{\footnotesize arr[2][1]};
+                \end{tikzpicture}
+            \end{center}
+        \end{onlyenv}
+    \end{frame}
+
+    \qnaframe
+    
+\end{document}

@@ -1,0 +1,71 @@
+% Author: cypok
+% https://github.com/cypok/op_lectures
+
+\tikzset{
+  byte lines/.style={black},
+  block byte lines/.style={maincolor!50!black},
+  mem block/.style={fill=maincolor!10},
+}
+
+\newcommand\memtop{1}
+\newcommand\membottom{0}
+
+\newcommand{\memline}[2]{
+  \def\left{#1-0.45}
+  \def\right{#2+0.45}
+
+  \draw[byte lines] (\left,\membottom) grid (\right,\memtop);
+
+  \foreach \y in {\membottom, \memtop}
+    \draw (\left,\y) -- (\right,\y);
+
+  \foreach \x in {\left, \right}
+    \draw [decorate,decoration={snake,amplitude=0.3mm,segment length=3mm}]
+      (\x,\membottom) -- (\x,\memtop);
+}
+
+\newcommand{\memblock}[3]{
+  \def\left{#1}
+  \def\right{#2}
+  \def\blockname{#3}
+
+  \draw [mem block,draw=none] (\left,\membottom) rectangle (\right,\memtop);
+  \draw [block byte lines] (\left,\membottom) grid (\right,\memtop);
+  \draw [mem block,fill=none] (\left,\membottom) rectangle (\right,\memtop)
+    node [pos=0.5] (block \blockname) {};
+}
+
+\newcommand{\memaddr}[2]{
+  \def\x{#1+0.5}
+  \def\y{\membottom-0.5}
+  \draw [-latex,shorten <=6pt] (\x,\y)
+    node [fill=white,inner sep=0,outer sep=0] {\ttfamily\small #2} -- (\x,\membottom);
+}
+
+\newcommand{\memlabel}[3]{
+  %\draw [decorate,decoration={brace, raise=0.7mm}] (#1,\memtop) -- (#2,\memtop)
+  %  node [midway,yshift=4mm] {\ttfamily #3};
+  \path (#1,\memtop) -- (#2,\memtop)
+    node [midway,yshift=3mm,text height=1.5ex] {\ttfamily #3};
+}
+
+\newcommand{\memblockwithaddr}[5]{
+  \memblock{#1}{#2}{#3}
+  \memaddr{#1}{#4}
+  \memaddr{#2-1}{#5}
+}
+
+\newcommand{\memblockwithaddrandlabel}[6]{
+  \memblockwithaddr{#1}{#2}{#3}{#4}{#5}
+  \memlabel{#1}{#2}{#6}
+}
+
+\newcommand{\memblockwithoneaddr}[4]{
+  \memblock{#1}{#2}{#3}
+  \memaddr{#1}{#4}
+}
+
+\newcommand{\memblockwithoneaddrandlabel}[5]{
+  \memblockwithoneaddr{#1}{#2}{#3}{#4}
+  \memlabel{#1}{#2}{#5}
+}

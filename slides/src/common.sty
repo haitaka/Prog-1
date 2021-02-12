@@ -4,6 +4,7 @@
 \usetikzlibrary{shapes,snakes}
 \usetikzlibrary{backgrounds}
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shadows.blur}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usepackage{amsmath,amsthm,amssymb}
@@ -15,33 +16,7 @@
 \usepackage{filecontents}
 
 
-
-\pgfplotsset{
-%        compat=1.15,
-    chart axis style/.style={
-        width = \textwidth,
-        height = 0.8\textheight,
-        ybar stacked, %
-        ymajorgrids=true,
-        axis line style={draw=none},
-        tick style={draw=none},
-        legend columns=-1,
-        legend style={at={(0.5,1.15)},anchor=north, draw=none, column sep=1ex, font=\tiny, text=gray},
-        bar width=0.8cm,%
-        scaled y ticks=false,
-        xtick=data,%
-        ticklabel style={font=\tiny, color=gray, tick style={ultra thin}},
-    }
-}
-
-\pgfplotsset{select coords between index/.style 2 args={
-    x filter/.code={
-        \ifnum\coordindex<#1\def\pgfmathresult{}\fi
-        \ifnum\coordindex>#2\def\pgfmathresult{}\fi
-    }
-}}
-
-\newcommand{\code}[1]{\lstinline$#1$}
+\newcommand{\code}[1][]{\lstinline[#1]}
 %\newcommand{\code}[1]{#1}
 
 \newcommand{\op}[1]{\operatorname{#1}}
@@ -65,13 +40,28 @@
 
 \colorlet{maincolor}{haiblue}
 
+\usepackage{lstautogobble}
 \lstset{
-    language=Java,
-    tabsize=4,
-    keywordstyle=\bfseries\color{maincolor!50!black},
-    numberstyle=\tiny\color{ideanumber},
-    commentstyle=\color{gray},
-    morekeywords={is,type,stackallocated,onStack},
+  language=C,
+  tabsize=4,
+  keywordstyle=\bfseries\color{maincolor!50!black},
+  numberstyle=\tiny\color{ideanumber},
+  commentstyle=\color{gray},
+  morekeywords={is,type,stackallocated,onStack},
+  %
+  %xleftmargin=0.03\textwidth,
+  %aboveskip=0.75\medskipamount,
+  %belowskip=0.5\medskipamount,
+  %
+  basicstyle=\ttfamily\small,
+  %keywordstyle=\color{codeKeyword},
+  %stringstyle=\color{codeString},
+  %commentstyle=\color{codeComment},
+  %
+  literate={-}{-}1, % render dash as dash
+  showstringspaces=false,
+  %
+  autogobble
 }
 
 
@@ -95,7 +85,10 @@
 \useinnertheme{circles}
 
 %gets rid of bottom navigation bars
-\setbeamertemplate{footline}[frame number]{}
+%\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{\usebeamercolor[fg]{title}\vspace*{-8pt} \hfill \insertshortauthor ~ \insertframenumber/\inserttotalframenumber}}
+\setbeamertemplate{navigation symbols}{}
 
 
 %gets rid of footer
@@ -114,10 +107,11 @@
 \setbeamertemplate{title page}{
     \begin{beamercolorbox}[wd=\paperwidth,ht=4cm]{Title bar}
         \begin{tikzpicture}[remember picture, overlay, framed]
-            \node[right] at (1, 7em) {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle};
-            \node[right] at (1, 4.5em) {\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} \insertsubtitle};
-            \fill[color=maincolor] (0,0) rectangle (0.75\paperwidth, 3em);
-            \node[right] at (1, 1.5em) {\usebeamerfont{author} \usebeamercolor[fg]{author} \insertauthor};
+            \node[right] at (1, 5em) {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle};
+            %\node[right] at (1, 4.5em) {\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} \insertsubtitle};
+            \fill[color=maincolor, blur shadow={shadow xshift=1, shadow yshift=-1, shadow blur steps=5}] (0,0) rectangle (0.75\paperwidth, 3em);
+            \node[right] at (1, 1.5em) {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertsubtitle};
+            \node[right] at (1, -1.5em) {\usebeamerfont{date}\usebeamercolor[fg]{subtitle}\insertdate};
         \end{tikzpicture}%
     \end{beamercolorbox}
 }
@@ -138,3 +132,22 @@
 \setbeamercolor{block body}{bg=white}
 
 \setbeamercolor{page number in head/foot}{fg=maincolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=huaweired,
+    filecolor=maincolor,
+    urlcolor=maincolor,
+}
+
+
+\newcommand\qnaframe{
+    \begin{frame}[plain] % Q&A
+        \begin{beamercolorbox}[wd=\paperwidth,ht=4cm]{Title bar}
+            \begin{tikzpicture}[remember picture, overlay, framed]
+                \fill[color=maincolor, blur shadow={shadow xshift=1, shadow yshift=-1, shadow blur steps=5}] (0,0) rectangle (0.75\paperwidth, 5em);
+                \node[right] at (1, 2.5em) {\usebeamercolor[fg]{author}\huge Q \& A};
+            \end{tikzpicture}%
+        \end{beamercolorbox}
+    \end{frame}
+}
