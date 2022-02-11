@@ -14,9 +14,8 @@
 \usepackage{siunitx}
 \usepackage{pgfplots, pgfplotstable}
 \usepackage{filecontents}
+\usepackage[outputdir=../out]{minted}
 
-
-\newcommand{\code}[1][]{\lstinline[#1]}
 %\newcommand{\code}[1]{#1}
 
 \newcommand{\op}[1]{\operatorname{#1}}
@@ -48,7 +47,7 @@
   numberstyle=\tiny\color{ideanumber},
   commentstyle=\color{gray},
   stringstyle=\color{green},
-  morekeywords={is,type,stackallocated,onStack},
+  morekeywords={is,type,stackallocated,onStack,assert},
   %
   %xleftmargin=0.03\textwidth,
   %aboveskip=0.75\medskipamount,
@@ -65,6 +64,12 @@
   autogobble
 }
 
+\usemintedstyle{hai}
+\setminted{autogobble}
+\setminted{beameroverlays}
+% \setminted{fontsize=\small}
+
+\newcommand{\code}[2][]{\mintinline[#1]{c}{#2}}
 
 \tikzset{>=latex}
 %\tikzset{yscale=-1}

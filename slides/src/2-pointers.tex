@@ -36,7 +36,7 @@
         \begin{block}{Указатель на int}
             \begin{center}
                 \begin{tikzpicture}
-                    \node at (0, 0) {\code[basicstyle=\ttfamily\Huge]{int * x;}};
+                    \node at (0, 0) {\code[fontsize=\Huge]{int * x;}};
                     \draw [decorate,decoration={brace,amplitude=12pt},xshift=0pt,yshift=-4pt] (-2.5, 0.7) -- (0.6, 0.7)
                         node [align=center,black,midway,yshift=0.8cm] {тип указателя};
                     \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-2.5, -0.1) -- (-0.5, -0.1)
@@ -50,7 +50,7 @@
         \begin{block}{Указатель на указатель на int}
             \begin{center}
                 \begin{tikzpicture}
-                    \node at (0, 0) {\code[basicstyle=\ttfamily\Huge]{int ** x;}};
+                    \node at (0, 0) {\code[fontsize=\Huge]{int ** x;}};
                     \draw [decorate,decoration={brace,amplitude=12pt},xshift=0pt,yshift=-4pt] (-2.8, 0.7) -- (0.85, 0.7)
                         node [align=center,black,midway,yshift=0.8cm] {тип указателя};
                     \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-2.8, -0.1) -- (0.3, -0.1)
@@ -65,27 +65,28 @@
             \column{0.5\textwidth}
                 \begin{block}{Взятие указателя}
                     (Address-of)
-                    \begin{lstlisting}[basicstyle=\ttfamily\large]
+                    \begin{minted}[fontsize=\large]{c}
+                        // йцу
                         int x;
                         int * p = &x;
-                    \end{lstlisting}
+                    \end{minted}
                 \end{block}
             \column{0.5\textwidth}
                 \pause
                 \begin{block}{Разыменование}
                     (Dereference)
-                    \begin{lstlisting}[basicstyle=\ttfamily\large]
+                    \begin{minted}[fontsize=\large]{c}
                         int * p;
                         int x = *p;
-                    \end{lstlisting}
+                    \end{minted}
                 \end{block}
         \end{columns}
         \pause
         \begin{center}
             \begin{minipage}{0.4\textwidth}
-                \begin{lstlisting}[basicstyle=\ttfamily\large]
+                \begin{minted}[fontsize=\large]{c}
                         *(&x) == x;
-                \end{lstlisting}
+                \end{minted}
             \end{minipage}
         \end{center}
     \end{frame}
@@ -184,7 +185,7 @@
         \begin{onlyenv}<5>
             \begin{center}
                 \begin{tikzpicture}
-                    \node at (0, -1) {\code[basicstyle=\ttfamily\Huge]{int arr[3];}};
+                    \node at (0, -1) {\code[fontsize=\Huge]{int arr[3];}};
                     \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=7pt},xshift=0pt,yshift=-4pt] (-3.5, -1.1) -- (-1.5, -1.1)
                         node [align=center,black,midway,yshift=-1.0cm] {тип элементов};
                     \draw [decorate,decoration={brace,amplitude=10pt,mirror,raise=10pt},xshift=0pt,yshift=-4pt] (1.5, -1.1) -- (2.2, -1.1)
@@ -224,14 +225,14 @@
             \item<2-> Размер статического массива --- константа
                 \begin{itemize}
                     \item<3-> Целое число
-                        \begin{lstlisting}
+                        \begin{minted}{c}
                             int arr[42];
-                        \end{lstlisting}
+                        \end{minted}
                     \item<4-> Константа препроцесора
-                        \begin{lstlisting}
+                        \begin{minted}{c}
                             #define ARR_SIZE 42
                             int arr[ARR_SIZE];
-                        \end{lstlisting}
+                        \end{minted}
                 \end{itemize}
         \end{itemize}
     \end{frame}
@@ -239,27 +240,27 @@
     \begin{frame}[fragile]{Инициализация массива}
         \begin{itemize}
             \item<1-> Без инициализации
-                \begin{lstlisting}
+                \begin{minted}{c}
                     int arr[4]; // {?, ?, ?, ?}
-                \end{lstlisting}
+                \end{minted}
             \item<2-> С выводом размера
-                \begin{lstlisting}
+                \begin{minted}{c}
                     int arr[] = {4, 8}; // {4, 8}
-                \end{lstlisting}
+                \end{minted}
             \item<3-> Частичная инициализация
-                \begin{lstlisting}
+                \begin{minted}{c}
                     int arr[4] = {15, 16}; // {15, 16, ?, ?}
-                \end{lstlisting}
+                \end{minted}
             \item<4-> Инициализация строкой
-                \begin{lstlisting}
+                \begin{minted}{c}
                     char arr[] = "Hello"; // {'H', 'e', 'l', 'l', 'o', 0}
-                \end{lstlisting}
+                \end{minted}
         \end{itemize}
     \end{frame}
 
     \begin{frame}[fragile,t]{Двумерные массивы}
         \begin{onlyenv}<1,2>
-            \begin{lstlisting}
+            \begin{minted}{c}
                 #define N 3
                 #define M 2
 
@@ -267,10 +268,10 @@
                     int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
                     ...
                 }
-            \end{lstlisting}
+            \end{minted}
         \end{onlyenv}
         \begin{onlyenv}<3->
-        \begin{lstlisting}
+        \begin{minted}{c}
                 int main() {
                     int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
 
@@ -278,7 +279,7 @@
                     arr[0][1] == 8
                     arr[2][1] == 42
                 }
-        \end{lstlisting}
+        \end{minted}
         \end{onlyenv}
         \begin{onlyenv}<2->
             \begin{center}

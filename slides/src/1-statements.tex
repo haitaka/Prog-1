@@ -5,8 +5,7 @@
 \title{Программирование}
 \subtitle{1 | Операторы}
 \author{a.glushko@g.nsu.ru}
-%\institute{University of ShareLaTeX}
-\date{6 февраля 2021}
+\date{12 февраля 2022}
 
 
 \begin{document}
@@ -17,23 +16,23 @@
 
     \begin{frame}[fragile]{Условный оператор}
         \begin{onlyenv}<1>
-            \begin{lstlisting}
+            \begin{minted}{c}
                 if (x == 42) {
                     printf("x is 42");
                 }
-            \end{lstlisting}
+            \end{minted}
         \end{onlyenv}
         \begin{onlyenv}<2>
-            \begin{lstlisting}
+            \begin{minted}{c}
                 if (x == 42) {
                     printf("x is 42");
                 } else {
                     printf("x is not 42");
                 }
-            \end{lstlisting}
+            \end{minted}
         \end{onlyenv}
         \begin{onlyenv}<3>
-            \begin{lstlisting}
+            \begin{minted}{c}
                 if (x == 42) {
                     printf("x is 42");
                 } else {
@@ -43,10 +42,10 @@
                         printf("x is not 42");
                     }
                 }
-            \end{lstlisting}
+            \end{minted}
         \end{onlyenv}
-        \begin{onlyenv}<3>
-            \begin{lstlisting}
+        \begin{onlyenv}<4>
+            \begin{minted}{c}
                 if (x == 42) {
                     printf("x is 42");
                 } else if (x == 37) {
@@ -54,47 +53,47 @@
                 } else {
                     printf("x is not 42");
                 }
-            \end{lstlisting}
+            \end{minted}
         \end{onlyenv}
     \end{frame}
 
     \begin{frame}[fragile]{Цикл}
-        \begin{lstlisting}
+        \begin{minted}{c}
             while (x > 10) {
                 x -= 1;
             }
-        \end{lstlisting}
+        \end{minted}
     \end{frame}
 
     \begin{frame}[fragile]{Цикл}
-        \begin{lstlisting}
+        \begin{minted}{c}
             do {
                 x -= 1;
             } while (x > 10);
-        \end{lstlisting}
+        \end{minted}
     \end{frame}
 
     \begin{frame}[fragile]{Цикл}
         \begin{columns}
             \begin{column}{0.6\textwidth}
-                \begin{lstlisting}
+                \begin{minted}{c}
                     for (int i = 0; i < 10; ++i) {
                         printf("hi");
                     }
-                \end{lstlisting}
+                \end{minted}
             \end{column}
             \begin{column}{0.4\textwidth}<2->
                 \begin{onlyenv}<2>
-                    \begin{lstlisting}
+                    \begin{minted}{c}
                         int i = 0;
                         while (i < 10) {
                             printf("hi");
                             ++i;
                         }
-                    \end{lstlisting}
+                    \end{minted}
                 \end{onlyenv}
                 \begin{onlyenv}<3>
-                \begin{lstlisting}
+                \begin{minted}{c}
                         int i = 0;
                         while (1) {
                             if (i >= 10) {
@@ -103,7 +102,7 @@
                             printf("hi");
                             ++i;
                         }
-                    \end{lstlisting}
+                    \end{minted}
                 \end{onlyenv}
             \end{column}
         \end{columns}
@@ -119,7 +118,7 @@
     \begin{frame}[fragile]{Switch}
         \begin{columns}
             \begin{column}{0.5\textwidth}
-                \begin{lstlisting}
+                \begin{minted}{c}
                     switch (x) {
                         case 1:
                             printf("first");
@@ -131,10 +130,10 @@
                         default:
                             printf("default");
                     }
-                \end{lstlisting}
+                \end{minted}
             \end{column}
             \begin{column}{0.5\textwidth}<2>
-                \begin{lstlisting}
+                \begin{minted}{c}
                     if (x == 1) {
                         printf("first");
                         printf("second");
@@ -146,7 +145,7 @@
                     } else {
                         printf("default");
                     }
-                \end{lstlisting}
+                \end{minted}
             \end{column}
         \end{columns}
     \end{frame}

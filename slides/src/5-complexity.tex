@@ -1,0 +1,230 @@
+\documentclass[aspectratio=169,14pt]{beamer}
+\usepackage{common}
+\usepackage{memoryviz}
+
+
+\title{Программирование}
+\subtitle{5 | Сложность}
+\author{a.glushko@g.nsu.ru}
+\date{15 марта 2021}
+
+
+\begin{document}
+
+    \begin{frame}
+        \titlepage
+    \end{frame}
+
+    \begin{frame}{Сложность}
+        \begin{itemize}
+            \item Какой из двух алгоритмов лучше?
+            \item Как долго выполняется алгоритм?
+            \item Как много памяти он потребляет?
+            \item<2> Что важнее?
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Поиск элемента в массиве}
+        Для данного значения \code{x} и массива \code{arr} найти такой индекс \code{i}, \\что \code{arr[i] == x}.
+
+        ~\\
+        \begin{onlyenv}<1>
+            \begin{minted}{c}
+                int find(int arr[], int size, int x) {
+                    ...
+                }
+            \end{minted}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+            \begin{minted}{c}
+                int find(int arr[], int size, int x) {
+                    for (int i = 0; i < size; i++) {
+                        if (arr[i] == x) {
+                            return i;
+                        }
+                    }
+                    return -1;
+                }
+            \end{minted}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}[fragile]{Поиск элемента в массиве}
+        А если массив упорядочен?
+
+        ~\\
+        \begin{onlyenv}<2>
+            \begin{minted}{c}
+                int arr[] = {4, 8, 15, 16, 23, 42, 108};
+
+                int find(int arr[], int size, int x) {
+                    assert(isSorted(arr, size));
+                    ...
+                }
+            \end{minted}
+        \end{onlyenv}
+
+        \begin{onlyenv}<3->
+            \begin{enumerate}
+                \item Если \code{size == 1}
+                \item
+                    \begin{onlyenv}<4->
+                        Если \code{size == N > 1} \\
+                        \only<5->{Положим, что задача решена для \code{size < N}}
+                        ~\\
+                        \only<6->{Выберем середину массива}
+                        ~\\
+                        \begin{tikzpicture}[ scale=0.8 ]
+                            \draw [color=lightgray,draw=none] (1, 0)  rectangle (3, 1) node [pos=0.5] (p0) {\ldots};
+                            \draw [color=lightgray] (3, 0)  rectangle (4, 1) node [pos=0.5] (p1) {15};
+                            \draw [color=lightgray] (4, 0)  rectangle (5, 1) node [pos=0.5] (p2) {16};
+
+                            \draw [color=lightgray] (6, 0)  rectangle (7, 1) node [pos=0.5] (a1) {42};
+                            \draw [color=lightgray] (7, 0)  rectangle (8, 1) node [pos=0.5] (a2) {108};
+                            \draw [color=lightgray,draw=none] (8, 0)  rectangle (10, 1) node [pos=0.5] (a0) {\ldots};
+
+                            \draw [color=black,thick] (1, 0)  rectangle (5, 1);
+                            \draw [color=black,thick] (5, 0)  rectangle (6, 1) node [pos=0.5] (m) {23};
+                            \draw [color=black,thick] (6, 0)  rectangle (10, 1);
+
+                            \begin{onlyenv}<7->
+                                \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=2pt},xshift=0pt,
+                                yshift=0pt] (1, 0) -- (5, 0) node [align=center,black,midway,yshift=-1cm] {здесь умеем искать};
+                            \end{onlyenv}
+                            \begin{onlyenv}<8->
+                                \draw [decorate,decoration={brace,amplitude=12pt,mirror,raise=2pt},xshift=0pt,
+                                yshift=0pt] (6, 0) -- (10, 0) node [align=center,black,midway,yshift=-1cm] {здесь тоже};
+                            \end{onlyenv}
+                        \end{tikzpicture}
+                    \end{onlyenv}
+            \end{enumerate}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}[fragile]{Поиск элемента в массиве}
+        Для данного значения \code{x} и отсортированного массива \code{arr} найти такой индекс \code{i}, что
+        \code{arr[i] == x}.
+
+        ~\\
+        \begin{onlyenv}<1>
+            \begin{minted}{c}
+                int find_binary(int arr[], int l, int r, int x) {
+                    if (l > r) { return -1; }
+                    int pivot = (l + r) / 2;
+                    if (arr[pivot] == x) { return pivot; }
+                    if (arr[pivot] > x) {
+                        return find_binary(arr, l, pivot - 1, x);
+                    }
+                    return find_binary(arr, pivot + 1, r, x);
+                }
+            \end{minted}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}{Сравнение алгоритмов}
+        \begin{itemize}
+            \item<1-> Какой алгоритм лучше?
+            \item<2-> Какой быстрее работает на отсортированном массиве?
+            \item<3-> Как много операций приходится выполнять?
+                \begin{itemize}
+                    \item<4-> Зависит от размера входных данных (массива)
+                    \item<5-> Зависит от характера входных данных
+                \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Сравнение алгоритмов}
+        \begin{block}{Как много операций приходится выполнять алгоритму?}
+            \begin{itemize}
+                \item<1-> Функция размера входных данных
+                \item<1-> Функция распределения входных данных
+                \begin{itemize}
+                    \item<2-> В лучше случае
+                    \item<3-> В худшем случае
+                    \item<4-> В наиболее вероятном (среднем) случае
+                \end{itemize}
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}{Сравнение алгоритмов}
+        \begin{block}{Что аткое операция?}
+            \begin{itemize}
+                \item<1-> Арифметика
+                \item<2-> Сравнения
+                \item<3-> Чтение и запись памяти
+                \item<4-> \dots
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}[fragile]{Поиск перебором}
+        \begin{onlyenv}<1>
+            \begin{itemize}
+                \item Арифметика
+                \item Сравнения
+                \item Чтение и запись памяти
+            \end{itemize}
+        \end{onlyenv}
+        \begin{minted}{c}
+            int find(int arr[], int size, int x) {
+                for (int i = 0; i < size; i++) {
+                    if (arr[i] == x) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+        \end{minted}
+        \begin{onlyenv}<2->
+            \begin{itemize}
+                \item<2-> 4 операции на итерацию
+                \item<3-> От \code{1} до \code{size} итераций
+                \item<6-> \code{(4 * size) + 2} операций в худшем случае
+                \item<4-5> \code{4 * size} операций в худшем случае
+                \item<5> Ещё инициализация \code{i} и \code{return}
+            \end{itemize}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}[fragile]{Бинарный поиск}
+        \begin{minted}{c}
+            int find_binary(int arr[], int l, int r, int x) {
+                if (l > r) { return -1; }
+                int pivot = (l + r) / 2;
+                if (arr[pivot] == x) { return pivot; }
+                if (arr[pivot] > x) {
+                    return find_binary(arr, l, pivot - 1, x);
+                }
+                return find_binary(arr, pivot + 1, r, x);
+            }
+        \end{minted}
+        \begin{onlyenv}<2->
+        \begin{itemize}
+            \item<2-> Не менее 12 операции в каждом вызове!
+            \item<3-> \code{[log_2(size)] + 1} вызовов
+            \item<4-> \code{([log_2(size)] + 1) + 1} операций в худшем случае
+        \end{itemize}
+        \end{onlyenv}
+    \end{frame}
+
+    \begin{frame}{Сравнение сложности}
+        \begin{itemize}
+            \item<1-> \code{(4 * size) + 2}
+            \item<1-> \code{([log_2(size)] + 1) + 1}
+            \item<2-> Как сравнить?
+            \item $O$
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{TODO}
+        \begin{itemize}
+            \item Подробнее про классы функций
+            \item Средний случай
+            \item Ёмкостная сложность
+        \end{itemize}
+    \end{frame}
+
+    \qnaframe
+
+\end{document}
