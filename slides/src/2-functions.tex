@@ -1,13 +1,13 @@
 \documentclass[aspectratio=169,14pt]{beamer}
 \usepackage{common}
 \usepackage{memoryviz}
+\usepackage{stackviz}
 
 
 \title{Программирование}
-\subtitle{4 | Функции}
+\subtitle{2 | Функции}
 \author{a.glushko@g.nsu.ru}
-\date{15 февраля 2021}
-
+\date{14 февраля 2022}
 
 \begin{document}
 
@@ -27,10 +27,10 @@
     \begin{frame}[fragile]{Функции}
         \begin{itemize}
             \item $f(x) = x^2$
-            \item $f: \mathbb{R} \rightarrow \mathbb{R}$
+            \item $f: \mathbb{N} \rightarrow \mathbb{N}$
             \item<2->
                 \begin{minted}{c}
-                    double f(double x) {
+                    int f(int x) {
                         return x * x;
                     }
                 \end{minted}
@@ -80,7 +80,7 @@
             \begin{minted}{c}
                 int factorial(int n) {
                     int res = 1;
-                    for (int i = 0; i < n; ++i) {
+                    for (int i = 1; i < n; ++i) {
                         res *= i;
                     }
                     return res;
@@ -99,33 +99,64 @@
         \end{onlyenv}
     \end{frame}
 
-    \begin{frame}[fragile]{Локальные и глобальные переменные}
+    \begin{frame}[fragile]{Автоматическая память (стек)}
         \begin{columns}
             \begin{column}{0.5\textwidth}
-                \begin{minted}{c}
-                    #include <stdio.h>
+                \begin{onlyenv}<-6,8->
+                    \begin{minted}{c}
+                        #include <stdio.h>
 
-                    int N = 3;
-
-                    void printSquare(int x) {
-                        int s = x * x;
-                        printf("%d\n", s);
-
-                        if (x < N) {
-                            printSquare(x + 1);
+                        void bin(int x) {
+                            int q = x / 2;
+                            if (q != 0) {
+                                bin(q);
+                            }
+                            printf("%d", x % 2);
                         }
-                    }
-                \end{minted}
+                    \end{minted}
+                \end{onlyenv}
+                \begin{onlyenv}<8->
+                    \vspace*{0.5\baselineskip}
+                    %\hrule
+                    \vspace*{0.5\baselineskip}
+                    {\color{gray}OUTPUT:} \only<9->{1} \only<11->{1} \only<13->{0}
+                \end{onlyenv}
+                \begin{onlyenv}<7>
+                    \includegraphics[width=\textwidth]{media/dbg-stack}
+                \end{onlyenv}
             \end{column}
             \begin{column}{0.5\textwidth}
                 \begin{onlyenv}<2>
                     \begin{itemize}
-                        \item Где расположены \code{x} и \code{s}?
+                        \item Где расположены \code{x} и \code{q}?
                     \end{itemize}
                 \end{onlyenv}
-                \begin{onlyenv}<3>
-                    \begin{tikzpicture}[ scale=1 ]
-%                        \draw (0, 0) rectangle (3, 1) node[pos=0.5] {qwe};
+                \begin{onlyenv}<3->
+                    \begin{tikzpicture}[ scale=0.8 ]
+                        \renewcommand{\stackright}{4}
+                        \stack{8}
+                        \begin{onlyenv}<4->
+                            \stackframe{0}{2}{\code{bin(6)}}
+                            \stackelem{0}{\code{x = 6}}
+                            \stackelem{1}{\code{q = 3}}
+                            \only<14->{\killframe{0}{2}}
+                        \end{onlyenv}
+
+                        \begin{onlyenv}<5->
+                            \stackframe{2}{5}{\code{bin(3)}}
+                            \stackelemnofill{2}{\dots}
+                            \stackelem{3}{\code{x = 3}}
+                            \stackelem{4}{\code{q = 1}}
+                            \only<12->{\killframe{2}{5}}
+                        \end{onlyenv}
+
+                        \begin{onlyenv}<6->
+                            \stackframe{5}{8}{\code{bin(1)}}
+                            \stackelemnofill{5}{\dots}
+                            \stackelem{6}{\code{x = 1}}
+                            \stackelem{7}{\code{q = 0}}
+                            \only<10->{\killframe{5}{8}}
+                        \end{onlyenv}
                     \end{tikzpicture}
                 \end{onlyenv}
             \end{column}

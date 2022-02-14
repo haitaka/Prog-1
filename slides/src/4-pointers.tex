@@ -4,10 +4,9 @@
 
 
 \title{Программирование}
-\subtitle{2 | Указатели и массивы}
+\subtitle{4 | Указатели}
 \author{a.glushko@g.nsu.ru}
-%\institute{University of ShareLaTeX}
-\date{13 февраля 2021}
+\date{19 февраля 2022}
 
 
 \begin{document}
@@ -153,8 +152,8 @@
         \end{block}
     \end{frame}
 
-    \begin{frame}[fragile,t]{Массив}
-        Массив -- упорядоченный набор элементов одного типа.
+    \begin{frame}[fragile,t]{Массивы и указатели}
+        Имена одномерных массивов в C --- неизменяемые указатели на первый элемент
         \begin{onlyenv}<2->
             \begin{center}
                 \begin{tikzpicture}[ scale=0.8 ]
@@ -216,98 +215,6 @@
                     \end{center}
                 \end{column}
             \end{columns}
-        \end{onlyenv}
-    \end{frame}
-
-    \begin{frame}[fragile]{Объявление массива}
-        \begin{itemize}
-            \item<1-> Имена одномерных массивов в C --- неизменяемые указатели на первый элемент
-            \item<2-> Размер статического массива --- константа
-                \begin{itemize}
-                    \item<3-> Целое число
-                        \begin{minted}{c}
-                            int arr[42];
-                        \end{minted}
-                    \item<4-> Константа препроцесора
-                        \begin{minted}{c}
-                            #define ARR_SIZE 42
-                            int arr[ARR_SIZE];
-                        \end{minted}
-                \end{itemize}
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}[fragile]{Инициализация массива}
-        \begin{itemize}
-            \item<1-> Без инициализации
-                \begin{minted}{c}
-                    int arr[4]; // {?, ?, ?, ?}
-                \end{minted}
-            \item<2-> С выводом размера
-                \begin{minted}{c}
-                    int arr[] = {4, 8}; // {4, 8}
-                \end{minted}
-            \item<3-> Частичная инициализация
-                \begin{minted}{c}
-                    int arr[4] = {15, 16}; // {15, 16, ?, ?}
-                \end{minted}
-            \item<4-> Инициализация строкой
-                \begin{minted}{c}
-                    char arr[] = "Hello"; // {'H', 'e', 'l', 'l', 'o', 0}
-                \end{minted}
-        \end{itemize}
-    \end{frame}
-
-    \begin{frame}[fragile,t]{Двумерные массивы}
-        \begin{onlyenv}<1,2>
-            \begin{minted}{c}
-                #define N 3
-                #define M 2
-
-                int main() {
-                    int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
-                    ...
-                }
-            \end{minted}
-        \end{onlyenv}
-        \begin{onlyenv}<3->
-        \begin{minted}{c}
-                int main() {
-                    int arr[N][M] = {{4, 8}, {15, 16}, {23, 42}};
-
-                    arr[0][0] == 4
-                    arr[0][1] == 8
-                    arr[2][1] == 42
-                }
-        \end{minted}
-        \end{onlyenv}
-        \begin{onlyenv}<2->
-            \begin{center}
-                \begin{tikzpicture}[ scale=1 ]
-                    \memline{1}{9}
-
-                    \draw [mem block,draw=none] (2,\membottom)  rectangle (3,\memtop)  node [pos=0.5] (a00) {4};
-                    \draw [maincolor!50!black] (2,\membottom) grid (3,\memtop);
-                    \draw [mem block,draw=none] (3,\membottom)  rectangle (4,\memtop)  node [pos=0.5] (a01) {8};
-                    \draw [maincolor!50!black] (3,\membottom) grid (4,\memtop);
-                    \draw [mem block,draw=none] (4,\membottom)  rectangle (5,\memtop)  node [pos=0.5] (a10) {15};
-                    \draw [maincolor!50!black] (4,\membottom) grid (5,\memtop);
-                    \draw [mem block,draw=none] (5,\membottom)  rectangle (6,\memtop)  node [pos=0.5] (a11) {16};
-                    \draw [block byte lines] (5,\membottom) grid (6,\memtop);
-                    \draw [mem block,draw=none] (6,\membottom)  rectangle (7,\memtop)  node [pos=0.5] (a20) {23};
-                    \draw [block byte lines] (6,\membottom) grid (7,\memtop);
-                    \draw [mem block,draw=none] (7,\membottom)  rectangle (8,\memtop)  node [pos=0.5] (a21) {42};
-                    \draw [block byte lines] (7,\membottom) grid (8,\memtop);
-
-                    \draw [mem block,fill=none,thick] (2,\membottom) rectangle (4,\memtop);
-                    \draw [mem block,fill=none,thick] (4,\membottom) rectangle (6,\memtop);
-                    \draw [mem block,fill=none,thick] (6,\membottom) rectangle (8,\memtop);
-
-%                    \memaddr{2}{\footnotesize arr};
-%                    \memaddr{4}{\footnotesize arr[1]};
-%                    \memaddr{7}{\footnotesize arr[2][1]};
-                \end{tikzpicture}
-            \end{center}
         \end{onlyenv}
     \end{frame}
 
